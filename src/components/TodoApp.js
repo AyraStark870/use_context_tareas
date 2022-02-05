@@ -1,5 +1,6 @@
 import React, { useReducer, useState, useEffect } from "react";
 import { todoReducer } from "../todoReducer/todoReducer";
+import { TodoList } from "./TodoList";
 
 const init = () => {
   return JSON.parse(localStorage.getItem("todos")) || [];
@@ -10,7 +11,6 @@ export default function TodoApp() {
 
   const handleChange = ({ target }) => {
     setTarea({
-      // ...tarea,
       [target.name]: target.value,
     });
   };
@@ -44,29 +44,20 @@ export default function TodoApp() {
   const handleDelete = (id) => {
     dispatch({ type: "delete", payload: id });
   };
-
+  const handleToggle = (id) => {
+    dispatch({ type: "toggle", payload: id });
+  };
   return (
     <div>
       <h1>TodosApp ({todos.length})</h1>
       <hr />
       <div className="row">
         <div className="col-7">
-          <ul className="list-group list-group-flush">
-            {todos.map((x, index) => (
-              <li key={x.id} className="list-group-item">
-                <p className="text-center">
-                  {" "}
-                  {index + 1}.{x.desc}
-                </p>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleDelete(x.id)}
-                >
-                  Borrar
-                </button>
-              </li>
-            ))}
-          </ul>
+          <TodoList
+            handleDelete={handleDelete}
+            handleToggle={handleToggle}
+            todos={todos}
+          />
         </div>
         <div className="col-5">
           <h4>agregar TODO</h4>
